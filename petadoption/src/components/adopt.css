@@ -1,0 +1,23 @@
+
+.form-group {
+    margin-bottom: 20px; /* Add space between form fields */
+  }
+  
+  .submit-button {
+    background-color: #007bff; /* Blue color for the button */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .submit-button:hover {
+    background-color: #0056b3; /* Darker blue color on hover */
+  }
+ 
+.Adopt-content h1 {
+    font-size: 24px; /* Adjust the font size as needed */
+    font-weight: bold; /* Make the text bold */
+  }
+  
