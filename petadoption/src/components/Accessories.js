@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './ShowAccessories.css'; // Import CSS file for styling
 import Header from './Header';
-import { dividerClasses } from '@mui/material';
+import { Link } from 'react-router-dom'; // Import Link from React Router
 
 export default function ShowAccessories() {
     // Sample array of products
@@ -20,15 +20,28 @@ export default function ShowAccessories() {
     const addToCart = (productId) => {
         const product = products.find(p => p.id === productId);
         if (product) {
-            setCart([...cart, product]);
+            const existingItemIndex = cart.findIndex(item => item.id === productId);
+            if (existingItemIndex !== -1) {
+                const updatedCart = [...cart];
+                updatedCart[existingItemIndex].quantity += 1;
+                setCart(updatedCart);
+            } else {
+                setCart([...cart, { ...product, quantity: 1 }]);
+            }
             setTotalAmount(totalAmount + product.price);
         }
     }
 
-    // Function to remove product from cart
+    // Function to remove one quantity of a product from the cart
     const removeFromCart = (productId) => {
-        const updatedCart = cart.filter(product => product.id !== productId);
-        const removedProduct = cart.find(product => product.id === productId);
+        const updatedCart = cart.map(item => {
+            if (item.id === productId) {
+                return { ...item, quantity: item.quantity - 1 };
+            }
+            return item;
+        }).filter(item => item.quantity > 0);
+
+        const removedProduct = products.find(product => product.id === productId);
         if (removedProduct) {
             setCart(updatedCart);
             setTotalAmount(totalAmount - removedProduct.price);
@@ -39,34 +52,36 @@ export default function ShowAccessories() {
         <div>
             <Header/>
             <div className="container">
-             
-             <div className="product-list">
-                
-                 {products.map(product => (
-                     <div className="product" key={product.id}>
-                         <img src={product.image} alt={product.name} />
-                         <div className="product-details">
-                             <span className="product-name">{product.name}</span>
-                             <span className="product-price">${product.price}</span>
-                             <button className="add-to-cart-btn" onClick={() => addToCart(product.id)}>Add to Cart</button>
-                         </div>
-                     </div>
-                 ))}
-             </div>
-             <div className="cart">
-                 <h2>Cart</h2>
-                 <ul>
-                     {cart.map(product => (
-                         <li key={product.id}>
-                             <span>{product.name}</span>
-                             <span>${product.price}</span>
-                             <button className="remove-btn" onClick={() => removeFromCart(product.id)}>Remove</button>
-                         </li>
-                     ))}
-                 </ul>
-                 <p>Total Amount: ${totalAmount}</p>
-             </div>
-         </div>
+                <div className="product-list">
+                    {products.map(product => (
+                        <div className="product" key={product.id}>
+                            <img src={product.image} alt={product.name} />
+                            <div className="product-details">
+                                <span className="product-name">{product.name}</span>
+                                <span className="product-price">${product.price}</span>
+                                <button className="add-to-cart-btn" onClick={() => addToCart(product.id)}>Add to Cart</button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+                <div className="cart">
+                    <h2>Cart</h2>
+                    <ul>
+                        {cart.map(item => (
+                            <li key={item.id}>
+                                <span>{item.name}</span>
+                                <span>Quantity: {item.quantity}</span>
+                                <span>${item.price * item.quantity}</span>
+                                <button className="remove-btn" onClick={() => removeFromCart(item.id)}>Remove</button>
+                            </li>
+                        ))}
+                    </ul>
+                    <p>Total Amount: ${totalAmount}</p>
+                    <div className="center">
+                        <Link to="/payment" className="buy-btn" style={{ backgroundColor: 'green', color: 'white', padding: '10px', borderRadius: '5px' }}>Buy</Link>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }
