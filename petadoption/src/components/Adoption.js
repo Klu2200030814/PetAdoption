@@ -15,7 +15,7 @@ const FormComponent = () => {
         firstName: '',
         lastName: '',
         address: '',
-        phoneNumber: ''
+        email: ''
     });
 
     const handleChange = e => {
@@ -24,23 +24,22 @@ const FormComponent = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const formData = new FormData(event.currentTarget);
         const userData = {
-          firstName: formData.get('firstName'),
-          lastName: formData.get('lastName'),
-          address: formData.get('address'),
-          phoneNumber: formData.get('phoneNumber'),
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          address: formData.address,
+          email: formData.email,
         };
     
         try {
           const response = await axios.post('http://localhost:8081/register', userData);
           console.log('Registration successful:', response.data);
-          // Redirect to signin page after successful registration
-          navigate('/signin');
+          navigate('/thank'); // Redirect after successful registration
         } catch (error) {
           console.error('Error during registration:', error);
         }
-      };
+    };
+    
     
     return (
         <div>
@@ -59,11 +58,11 @@ const FormComponent = () => {
                     <input type="text" name="address" value={formData.address} onChange={handleChange} />
                 </div>
                 <div className="form-group">
-                    <label><h2>Phone Number:</h2></label>
-                    <input type="text" name="phoneNumber" value={formData.phoneNumber} onChange={handleChange} />
+                    <label><h2>Email:</h2></label>
+                    <input type="text" name="email" value={formData.emai} onChange={handleChange} />
                 </div>
                 <div className="form-group">
-                    <button type="submit" className="submit-button" onClick={handleClick}>Submit</button>
+                <button type="submit" className="submit-button">Submit</button>
                 </div>
             </form>
         </div>
