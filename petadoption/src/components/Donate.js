@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import Navbar from '../components/Header';
 import axios from 'axios'; // Don't forget to import axios
-
+import { useNavigate } from 'react-router-dom';
 function Donate() {
   const [amount, setAmount] = useState(0);
-
+  const navigate = useNavigate();
   const initPayment = (data) => {
     const options = {
       key: "rzp_test_06GeKary0jkcOO",
@@ -29,6 +29,7 @@ function Donate() {
   };
 
   const handlePayment = async () => {
+    navigate('/payment');
     try {
       const orderUrl = "http://localhost:8081/api/payment/orders";
       const { data } = await axios.post(orderUrl, { amount: amount });
@@ -58,6 +59,12 @@ function Donate() {
     <div className="donatecontanier">
     <br /><br />
         <label htmlFor="height">Enter Your Name:</label> 
+        <input type="text" id='name'/> <br /><br />
+        <label htmlFor="height">Enter Your E-mail:</label> 
+        <input type="text" id='name'/> <br /><br />
+        <label htmlFor="height">Enter Your contact:</label> 
+        <input type="text" id='name'/> <br /><br />
+        <label htmlFor="height">Date Of Birth:</label> 
         <input type="text" id='name'/> <br /><br />
       <div className="input-container"> 
         <label htmlFor="height">Enter Amount</label> 
